@@ -33,10 +33,10 @@ contract StorageLayout {
     bytes32 private password;
 
     // 不占用stroage空间
-    uint public constant someConst = 123;
+    uint public constant someConst = 0x44;
 
     // slot 3,4,5
-    // 定长数组按顺序排
+    // 定长数组按顺序排, 注意定长数组没有push方法, 只有length
     bytes32[3] public b32Data;
 
     // slot 6
@@ -47,6 +47,7 @@ contract StorageLayout {
     uint16 public u16_2 = 0x4444;
 
     // 单个结构体偏移量???
+    // 占用空间???
     User public oneUser;
 
     struct User {
@@ -61,16 +62,20 @@ contract StorageLayout {
     // 动态数组使用新的slot, 不论之前的slot剩余多大空间
     User[] private users;
 
+    bytes18 str = "abcdef";
+
+    bytes32 b32 = 0x1111111111111111111111111111111111111111111111111111111111111111;
+
     // a[i][j]二维数组寻址
     // 开始位置 web3.utils.soliditySha3(web3.utils.soliditySha3(slot) + i) + j
     // web3.utils.soliditySha3(slot) + i是第多少个插槽??? 里面存储的对应数组的长度???
     uint24[][] public datas3;
 
     // 一维数组顺序排列 二维数组动态sha3映射???
-    uint24[][5] public datas2;
+    uint24[][2] public datas2;
 
     // 固定数组按顺序排列???
-    uint24[2][3] public datas1;
+    uint24[3][2] public datas1;
 
     // bytes类似byte1[] 是一个动态数组
     bytes public bs;
@@ -83,9 +88,62 @@ contract StorageLayout {
 
     constructor(bytes32 _password) {
         password = _password;
-        name = "ssssss";
+
+        b32Data[0] = 0x1111111111111111111111111111111111111111111111111111111111111111;
+        b32Data[1] = 0x2222222222222222222222222222222222222222222222222222222222222222;
+        b32Data[2] = 0x3333333333333333333333333333333333333333333333333333333333333333;
+
+        u24Datas[0] = 0x111111;
+        u24Datas[1] = 0x222222;
+        u24Datas[2] = 0x333333;
+        u24Datas[3] = 0x444444;
+        u24Datas[4] = 0x555555;
+        u24Datas[5] = 0x666666;
+        u24Datas[6] = 0x777777;
+        u24Datas[7] = 0x888888;
+        u24Datas[8] = 0x999999;
+        u24Datas[9] = 0x121212;
+
+        // 创建临时的memoty结构体, 并拷贝到storage中
+        // oneUser = User({id:0x123,password:"ssshhh"});
+        oneUser = User(0x1234, "ssshhh");
+
+        users.push(User(0x01,"aaa"));
+        users.push(User(0x02,"bbb"));
+        users.push(User(0x03,"ccc"));
+
+
+        uint24[] memory e1 = new uint24[](3);
+        e1[0] = 0x111111;
+        e1[1] = 0x222222;
+        e1[2] = 0x333333;
+        datas3.push(e1);
+
+        uint24[] memory e2 = new uint24[](4);
+        e2[0] = 0x555555;
+        e2[1] = 0x666666;
+        e2[2] = 0x777777;
+        datas3.push(e2);
+
+        // datas2不具有push方法, 内部数组是动态的有push方法
+        datas2[0].push(0xaaaaaa);
+        datas2[1].push(0xbbbbbb);
+
+        // 二维数数组的定义和查询 行和列是相反的???
+        datas1[0][0] = 0xeeeeee;
+        datas1[0][1] = 0xffffff;
+        datas1[0][2] = 0xeeeeee;
+        datas1[1][0] = 0xffffff;
+        datas1[1][1] = 0xeeeeee;
+        datas1[1][2] = 0xffffff;
+
         bs.push(0x22);
         bs.push(0x33);
+
+        name = "ssssss";
+
+        idToUser[0] = User(0x1122,"ssshhh");
+        idToUser[1] = User(0x3344,"aaabbb");        
     }
 
     function addUser(bytes32 _password) public {
@@ -106,7 +164,5 @@ contract StorageLayout {
         return uint(keccak256(abi.encodePacked(key, slot)));
     }
 
-    receive() external payable {
-
-    }
+    receive() external payable {}
 }

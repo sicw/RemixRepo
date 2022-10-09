@@ -29,9 +29,10 @@ contract AddressType{
     address public d = address(this);
 
     // payable 与 合约 address转换
-    // 转换成payable时, 对应的合约要有receive或者fallback方法
+    // 转换成payable时, 对应的合约要有receive或者fallback方法, 不然在发送以太币时会报错
     address payable public e = payable(d);
-    address payable public f = payable(this);
+    // 合约需要有receive 或者 fallback payable, 如果没有也可以使用payable(address(this))转换
+    address payable public f = payable(address(this));
     // 从uint160转成address payable是不允许的, 需要先转换成address
     // address payable public g = payable(uint160(123));
     address payable public g = payable(address(uint160(123)));

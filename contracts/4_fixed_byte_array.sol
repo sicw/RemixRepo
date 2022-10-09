@@ -9,6 +9,7 @@ pragma solidity >=0.7.0 <0.9.0;
     2. 位运算符 & | ^ ~(非)
     3. 位移运算符 <<(左移) >>(右移)
     4. 索引访问 x[i] 返回第i的字节的值
+
 */
 contract FixedByteArray{
 

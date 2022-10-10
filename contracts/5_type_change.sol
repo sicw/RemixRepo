@@ -57,4 +57,17 @@ contract TypeChange{
     function getUint16C() external view returns (uint16){
         return uint16(c);
     }
+
+    /* 
+            整数与字面常量
+        uint num = 123;
+        uint num = 0x123;
+
+
+            定长字节数组与字面常量
+        bytes3 b = 0x112233;
+        bytes3 b = "abc";
+        bytes3 b = 0;
+     */
+
 }

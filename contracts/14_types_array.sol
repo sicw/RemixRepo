@@ -79,4 +79,15 @@ contract TypesArray {
         assert(xx.length == 3);
         assert(y.length == 3);
     }
+
+    /*
+        数组切片目前只允许用在calldata中
+        arr[start,end] 
+        start <= 取值的范围 < end
+    */
+    function arraySlice(uint[] calldata arr) external pure {
+        // calldata给memory赋值
+        uint[] memory arr1 = arr[1:];
+        assert(arr1.length <= arr.length);
+    }
 }

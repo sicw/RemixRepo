@@ -13,7 +13,7 @@ contract SelfDestruct {
     function destruct(address payable _destAddr) external {
         require(_destAddr != address(0), "dest address is null");
         // 销毁自己, 将余额发送给_destAddr合约
-        // _destAddr再接收到eth时, 不执行receive / fallback方法
+        // _destAddr在接收到eth时, 不执行receive / fallback方法
         selfdestruct(_destAddr);
     }
 

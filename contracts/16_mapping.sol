@@ -3,10 +3,10 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 /*
-    mapping只能在storage的位置上, 所以mapping可以是状态变量, 函数内的local storage.
+    mapping只能在storage的位置上, 所以mapping可以是状态变量, 函数内的local storage引用.
     这个限制也存在于包含mapping类型的数组和结构体中
 
-    mapping是无法遍历的, 但可以通过Wrapper包装
+    mapping是无法遍历的, 但可以通过Wrapper Item包装
 */
 contract TypsMapping {
 

@@ -3,6 +3,8 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract D {
+
+    // 状态变量可见性 public internal(默认的) private
     uint public x;
 
     event Log(address send, uint value);
@@ -11,6 +13,11 @@ contract D {
 
     }
 
+    /*
+        只有外部函数调用才会产生evm调用, 内部则不会
+        函数可见性
+        public external internal private
+    */
     function setX(uint data) external {
         x = data;
     }
@@ -20,6 +27,19 @@ contract D {
     }
 }
 
+/*
+    modifier
+    constant 和 Immutable
+    状态可变性 怎么算修改状态了
+    receive和fallback
+    override
+    event
+    error
+    is
+    abstract
+    interface
+    library
+*/
 contract ContarctDemo {
     
     event Log(address addr, uint x);

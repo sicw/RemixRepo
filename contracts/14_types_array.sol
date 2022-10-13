@@ -90,4 +90,16 @@ contract TypesArray {
         uint[] memory arr1 = arr[1:];
         assert(arr1.length <= arr.length);
     }
+
+    function returnFixedLengthArr() external pure returns(uint[3] memory) {
+        return [uint(1),2,3];
+    }
+
+    function returnVarLengthArr() external view returns(uint[] memory) {
+        // 返回内存动态数组, uint[](3)中的3可以使用变量代替
+        // uint[] memory arr = new uint[](3);
+        // return arr;
+        // 返回storage变量
+        return c;
+    }
 }

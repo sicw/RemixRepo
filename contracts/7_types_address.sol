@@ -88,6 +88,7 @@ contract AddressType{
     }
 
     // staticcall 与call类似, 但是被调函数中不能修改状态变量 不然会报错
+    // 使用操作码staticcall evm级别不支持修改状态变量
     // FooContract.changeBBData 中修改了bb的值, 所以会报revert
     function staticCall(address addr) external {
         // staticcall 不能设置value

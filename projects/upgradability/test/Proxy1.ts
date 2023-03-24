@@ -27,7 +27,7 @@ describe("Lock", function () {
     const logic1 = await Logic1.deploy();
 
     const Proxy1 = await ethers.getContractFactory("Proxy1");
-    const proxy1 = await Proxy1.deploy(logic1.address);
+    const proxy1 = await Proxy1.deploy(logic1.address,'0x0000000000000000000000000000000000000000');
 
     return { lock, unlockTime, lockedAmount, owner, otherAccount, logic1, proxy1};
   }
@@ -36,24 +36,30 @@ describe("Lock", function () {
     it("Should set the right unlockTime", async function () {
       const { lock, unlockTime, logic1, proxy1, owner} = await loadFixture(deployOneYearLockFixture);
       // expect(await lock.unlockTime()).to.equal(unlockTime);
-      console.log(`logic1.address: ${logic1.address}`);
-      console.log(`before set value logic1.value: ${await logic1.value()}`);
-      logic1.setValue(1);
-      console.log(`after set value logic1.value: ${await logic1.value()}`);
+      // console.log(`logic1.address: ${logic1.address}`);
+      // console.log(`before set value logic1.value: ${await logic1.value()}`);
+      // logic1.setValue(1);
+      // console.log(`after set value logic1.value: ${await logic1.value()}`);
+      //
+      // console.log(`proxy1.impl: ${await proxy1.impl()}`)
+      // console.log(`logic1.addr: ${logic1.address}`)
 
-      console.log(`proxy1.impl: ${await proxy1.impl()}`)
-      console.log(`logic1.addr: ${logic1.address}`)
+      console.log(`admin address: ${await proxy1.admin()}`)
 
       // 构造data
-      const data = await logic1.interface.encodeFunctionData("setValue",["2"]);
-      console.log(`data:${data}`)
+      // const data = await logic1.interface.encodeFunctionData(logic1.interface.getFunction("setValue"),["2"]);
+      const data = await logic1.interface.encodeFunctionData("setValue",["0x1111111111111111111111111111111111111111111111111111111111111111"]);
+      // console.log(`data:${data}`)
       const [ownerAddr] = await ethers.getSigners();
       const response = await ownerAddr.sendTransaction({
-        to: logic1.address,
+        to: proxy1.address,
         data: data
       });
-      console.log(`resp hash:${response.hash}`)
-      console.log(`after proxy set value logic1.value: ${await logic1.value()}`);
+      // console.log(`resp hash:${response.hash}`)
+
+      // console.log(`after proxy set value logic1.value: ${await logic1.value()}`);
+
+      console.log(`admin address: ${await proxy1.admin()}`)
     });
 
     it("Should set the right owner", async function () {

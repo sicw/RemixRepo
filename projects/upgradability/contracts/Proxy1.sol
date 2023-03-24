@@ -22,6 +22,7 @@ contract Proxy1 {
         (bool success, bytes memory result) = getImplementation().delegatecall(msg.data);
         require(success, "Failed to delegatecall");
         emit Log(success);
+        // 这里添加返回值, 再使用call调用时返回结果
         assembly {
             return(add(result, 0x20), mload(result))
         }

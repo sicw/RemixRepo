@@ -19,9 +19,12 @@ contract Proxy1 {
     }
 
     fallback() external {
-        bool r;
-        (r,) = getImplementation().delegatecall(msg.data);
-        emit Log(r);
+        (bool success, bytes memory result) = getImplementation().delegatecall(msg.data);
+        require(success, "Failed to delegatecall");
+        emit Log(success);
+        assembly {
+            return(add(result, 0x20), mload(result))
+        }
     }
 
     function upgradeTo(address _newImpl) public {

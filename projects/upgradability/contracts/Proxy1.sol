@@ -1,26 +1,48 @@
 pragma solidity ^0.8.9;
 
+import './StorageSlot.sol';
+
 contract Proxy1 {
 
-    address public admin;
+    //    address public admin;
+    //
+    //    address public impl;
 
-    address public impl;
+    bytes32 internal constant _IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+    bytes32 internal constant _ADMIN_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d3a2bbc;
 
     event Log(bool);
 
     constructor(address _impl, address _admin){
-        impl = _impl;
-        admin = _admin;
+        setImplementation(_impl);
+        setAdmin(_admin);
     }
 
     fallback() external {
         bool r;
-        (r, ) = impl.delegatecall(msg.data);
+        (r,) = getImplementation().delegatecall(msg.data);
         emit Log(r);
     }
 
     function upgradeTo(address _newImpl) public {
-        require(msg.sender==admin,"only admin can upgrade impl address");
-        impl = _newImpl;
+        require(msg.sender == getAdmin(), "only admin can upgrade impl address");
+        setImplementation(_newImpl);
     }
+
+    function getImplementation() public view returns (address) {
+        return StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value;
+    }
+
+    function setImplementation(address newImplementation) public {
+        StorageSlot.getAddressSlot(_IMPLEMENTATION_SLOT).value = newImplementation;
+    }
+
+    function getAdmin() public view returns (address) {
+        return StorageSlot.getAddressSlot(_ADMIN_SLOT).value;
+    }
+
+    function setAdmin(address newAdmin) public {
+        StorageSlot.getAddressSlot(_ADMIN_SLOT).value = newAdmin;
+    }
+
 }

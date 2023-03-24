@@ -44,7 +44,7 @@ describe("Lock", function () {
       // console.log(`proxy1.impl: ${await proxy1.impl()}`)
       // console.log(`logic1.addr: ${logic1.address}`)
 
-      console.log(`admin address: ${await proxy1.admin()}`)
+      // console.log(`admin address: ${await proxy1.admin()}`)
 
       // 构造data
       // const data = await logic1.interface.encodeFunctionData(logic1.interface.getFunction("setValue"),["2"]);
@@ -59,7 +59,7 @@ describe("Lock", function () {
 
       // console.log(`after proxy set value logic1.value: ${await logic1.value()}`);
 
-      console.log(`admin address: ${await proxy1.admin()}`)
+      console.log(`admin address: ${await proxy1.getAdmin()}`)
     });
 
     it("Should set the right owner", async function () {

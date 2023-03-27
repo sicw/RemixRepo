@@ -37,13 +37,14 @@ describe("Lock", function () {
             const {proxy1, logic1} = await loadFixture(deployOneYearLockFixture);
 
             // write value
-            const data = await logic1.interface.encodeFunctionData("setValue", ["0x11"]);
+            const value = 0x11
+            const data = await logic1.interface.encodeFunctionData("setValue", [value]);
             const [ownerAddr] = await ethers.getSigners();
             const response = await ownerAddr.sendTransaction({
                 to: proxy1.address,
                 data: data
             });
-            console.log(`proxy setValue hash: ${response.hash}`)
+            // console.log(`proxy setValue response: ${JSON.stringify(response)}`)
 
             // read value
             const readData = await logic1.interface.encodeFunctionData("value");
@@ -51,7 +52,8 @@ describe("Lock", function () {
                 to: proxy1.address,
                 data: readData
             });
-            console.log(`proxy value data: ${readResponse}`)
+            // console.log(typeof readResponse)
+            expect(Number(readResponse)).to.equal(value);
         })
     })
 

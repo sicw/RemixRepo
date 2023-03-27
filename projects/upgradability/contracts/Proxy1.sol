@@ -2,6 +2,7 @@ pragma solidity ^0.8.9;
 
 import './StorageSlot.sol';
 
+// 问题1: 如果admin要调用logic1的
 contract Proxy1 {
 
     //    address public admin;

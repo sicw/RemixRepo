@@ -2,17 +2,14 @@ pragma solidity ^0.8.9;
 
 import './StorageSlot.sol';
 
-// 问题1: 如果admin要调用logic1的
+/**
+    透明代理合约, 所有用户调用都通过fallback
+    其他方法必须要admin用户才可以调用
+*/
 contract Proxy1 {
-
-    //    address public admin;
-    //
-    //    address public impl;
 
     bytes32 internal constant _IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
     bytes32 internal constant _ADMIN_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d3a2bbc;
-
-    event Log(bool);
 
     constructor(address _impl, address _admin){
         setImplementation(_impl);
@@ -22,7 +19,6 @@ contract Proxy1 {
     fallback() external {
         (bool success, bytes memory result) = getImplementation().delegatecall(msg.data);
         require(success, "Failed to delegatecall");
-        emit Log(success);
         // 这里添加返回值, 再使用call调用时返回结果
         assembly {
             return(add(result, 0x20), mload(result))

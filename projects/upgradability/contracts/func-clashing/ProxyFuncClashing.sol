@@ -5,13 +5,6 @@ contract ProxyFuncClashing {
     uint32 public placeholder1;
     uint32 public placeholder2;
     uint32 public placeholder3;
-    uint32 public placeholder4;
-    uint32 public placeholder5;
-    uint32 public placeholder6;
-    uint32 public placeholder7;
-    uint32 public placeholder8;
-    uint32 public placeholder9;
-    uint32 public placeholder0;
 
     address public proxyOwner;
     address public implementation;

@@ -161,3 +161,18 @@ burn(uint256)
 
 参考:
 https://forum.openzeppelin.com/t/beware-of-the-proxy-learn-how-to-exploit-function-clashing/1070
+
+
+----
+
+代理合约要考虑的问题
+1. 逻辑合约地址被覆盖
+    使用固定slot
+2. gas费用问题
+    在logic合约中升级address
+3. 函数选择器冲突安全问题
+    在logic合约中升级address
+4. 多个逻辑合约升级字段冲突问题
+    永久存储、继承、hardhat工具
+
+减少gas的方式, 多代理同一逻辑实例

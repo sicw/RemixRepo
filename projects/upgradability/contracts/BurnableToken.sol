@@ -16,7 +16,8 @@ contract BurnableToken is ERC20BurnableUpgradeable {
     }
 
     function burn(uint256 amount) public override {
-        console.log("msg.sender %s burn count %d", msg.sender, amount);
+        console.log("burn count %d", amount);
+        super.burn(amount);
     }
 
     function _spendAllowance(address account, uint256 amount) public {
@@ -24,9 +25,6 @@ contract BurnableToken is ERC20BurnableUpgradeable {
     }
 
     function mint(address account, uint256 amount) public {
-        console.log("msg.sender %s mint %s count: %d", msg.sender, account, amount);
         _mint(account, amount);
-        uint256 count = balanceOf(account);
-        console.log("after count %d", count);
     }
 }

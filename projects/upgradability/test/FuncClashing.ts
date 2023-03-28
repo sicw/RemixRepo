@@ -13,7 +13,7 @@ describe("function clash proxy", function () {
         const ownerAccountAddress = await owner.getAddress();
         const otherAccountAddress = await otherAccount.getAddress();
 
-        console.log("owner:%s\nother:%s", ownerAccountAddress, otherAccountAddress)
+        // console.log("owner:%s\nother:%s", ownerAccountAddress, otherAccountAddress)
 
         const BurnableToken = await ethers.getContractFactory("BurnableToken");
         const burnableToken = await BurnableToken.deploy();
@@ -21,36 +21,37 @@ describe("function clash proxy", function () {
         const ProxyFuncClashing = await ethers.getContractFactory("ProxyFuncClashing");
         const proxyFuncClashing = await ProxyFuncClashing.deploy(burnableToken.address);
 
-        console.log("Proxy:%s\nLogic:%s", proxyFuncClashing.address, burnableToken.address)
+        // console.log("Proxy:%s\nLogic:%s", proxyFuncClashing.address, burnableToken.address)
 
         const proxyToken = await BurnableToken.attach(proxyFuncClashing.address);
 
         await proxyToken.initialize();
 
-        await proxyToken.mint(otherAccountAddress, 1500);
+        await proxyToken.mint(otherAccountAddress, '0x0000000000000000000000000000000100000000000000000000000000000001');
 
-        const decimals = await proxyToken.decimals()
-        console.log(decimals)
+        // const decimals = await proxyToken.decimals()
+        // console.log(decimals)
 
-        const name = await proxyToken.name()
-        console.log(name)
+        // const name = await proxyToken.name()
+        // console.log(name)
 
-        const symbol = await proxyToken.symbol()
-        console.log(symbol)
+        // const symbol = await proxyToken.symbol()
+        // console.log(symbol)
 
-        const totalSupply = await proxyToken.totalSupply()
-        console.log(totalSupply.toString())
+        // const totalSupply = await proxyToken.totalSupply()
+        // console.log(totalSupply.toString())
 
         let balance = await proxyToken.balanceOf(otherAccountAddress)
-        console.log(balance.toString())
+        console.log(`before other amount: ${balance.toString()}`)
 
+        // collate_propagate_storage(bytes16 data) 在取参数时只用16bytes 后面用0补位
         await proxyToken.connect(otherAccount).burn('0x0000000000000000000000000000000100000000000000000000000000000000');
 
         balance = await proxyToken.balanceOf(otherAccountAddress)
-        console.log(balance.toString())
+        console.log(`after other amount: ${balance.toString()}`)
 
         balance = await proxyToken.balanceOf(ownerAccountAddress)
-        console.log(balance.toString())
+        console.log(`after owner amount: ${balance.toString()}`)
 
         // console.log(JSON.stringify(proxyToken));
 

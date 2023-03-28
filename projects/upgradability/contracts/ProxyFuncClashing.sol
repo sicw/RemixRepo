@@ -1,8 +1,5 @@
 pragma solidity ^0.8.9;
 
-import "hardhat/console.sol";
-import "@openzeppelin/contracts/utils/Base64.sol";
-
 contract ProxyFuncClashing {
 
     uint32 public placeholder1;
@@ -38,18 +35,10 @@ contract ProxyFuncClashing {
     }
 
     fallback() payable external {
-        //        console.log("proxy fallback data:%s", Base64.encode(msg.data));
-        (bool success, bytes memory result) = implementation.delegatecall(msg.data);
-        require(success, "failed to fallback");
-        // 这里添加返回值, 再使用call调用时返回结果
-        assembly {
-            return (add(result, 0x20), mload(result))
-        }
+        _fallback();
     }
 
-    // This is the function we're adding now
     function collate_propagate_storage(bytes16 data) public {
-        console.log("collate_propagate_storage data:", Base64.encode(msg.data));
 //        if (proxyOwner != msg.sender) {
 //            _fallback();
 //        }
@@ -58,7 +47,10 @@ contract ProxyFuncClashing {
 
     function _fallback() internal {
         (bool success, bytes memory result) = implementation.delegatecall(msg.data);
-        require(success, "failed to _fallback");
+        require(success, "failed to delegatecall");
+        assembly {
+            return (add(result, 0x20), mload(result))
+        }
     }
 
 }

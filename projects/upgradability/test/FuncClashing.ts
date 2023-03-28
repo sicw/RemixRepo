@@ -27,7 +27,7 @@ describe("function clash proxy", function () {
 
         await proxyToken.initialize();
 
-        await proxyToken.mint(otherAccountAddress, 2000);
+        await proxyToken.mint(otherAccountAddress, 1500);
 
         const decimals = await proxyToken.decimals()
         console.log(decimals)

@@ -4,16 +4,16 @@ import "hardhat/console.sol";
 
 contract ProxyFuncClashing {
 
-    uint32 public x1;
-    uint32 public x2;
-    uint32 public x3;
-    uint32 public x4;
-    uint32 public x5;
-    uint32 public x6;
-    uint32 public x7;
-    uint32 public x8;
-    uint32 public x9;
-    uint32 public x0;
+    uint32 public placeholder1;
+    uint32 public placeholder2;
+    uint32 public placeholder3;
+    uint32 public placeholder4;
+    uint32 public placeholder5;
+    uint32 public placeholder6;
+    uint32 public placeholder7;
+    uint32 public placeholder8;
+    uint32 public placeholder9;
+    uint32 public placeholder0;
 
     address public proxyOwner;
     address public implementation;

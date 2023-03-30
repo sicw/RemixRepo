@@ -1,4 +1,5 @@
 import {time, loadFixture} from "@nomicfoundation/hardhat-network-helpers";
+import {BN, expectRevert, expectEvent, constants} from "@openzeppelin/test-helpers";
 import {expect} from "chai";
 import {ethers} from "hardhat";
 
@@ -24,8 +25,8 @@ describe("Lock", function () {
     describe("Deployment", function () {
         it("Should set the right counter", async function () {
             const {owner, otherAccount, upgradeableBeacon, beaconProxy1, beaconProxy2, Logic} = await loadFixture(deployLogicFixture);
-            expect(await Logic.attach(beaconProxy1.address).connect(otherAccount).increament()).to.equal(1);
-            expect(await Logic.attach(beaconProxy2.address).connect(otherAccount).current()).to.equal(0);
+            expect(await Logic.attach(beaconProxy1.address).current()).to.equal(0);
+            expect(await Logic.attach(beaconProxy2.address).current()).to.equal(0);
         });
 
         it("upgrade implement address", async function () {
@@ -36,6 +37,16 @@ describe("Lock", function () {
 
             expect(await Logic.attach(beaconProxy1.address).current()).to.equal(1);
             expect(await Logic.attach(beaconProxy2.address).current()).to.equal(1);
+
+            const NewLogic = await ethers.getContractFactory("Logic2");
+            const newLogic = await NewLogic.deploy();
+
+            await expectRevert.unspecified(NewLogic.attach(beaconProxy1.address).decrement());
+
+            await upgradeableBeacon.upgradeTo(newLogic.address);
+
+            await NewLogic.attach(beaconProxy1.address).decrement();
+            expect(await NewLogic.attach(beaconProxy1.address).current()).to.equal(0);
         });
 
     });

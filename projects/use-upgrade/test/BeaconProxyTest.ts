@@ -41,12 +41,26 @@ describe("Lock", function () {
             const NewLogic = await ethers.getContractFactory("Logic2");
             const newLogic = await NewLogic.deploy();
 
+            // 在这时还没有decrement函数
             await expectRevert.unspecified(NewLogic.attach(beaconProxy1.address).decrement());
 
             await upgradeableBeacon.upgradeTo(newLogic.address);
 
             await NewLogic.attach(beaconProxy1.address).decrement();
             expect(await NewLogic.attach(beaconProxy1.address).current()).to.equal(0);
+        });
+
+        it("admin can call logic", async function () {
+            const {owner, otherAccount, upgradeableBeacon, beaconProxy1, beaconProxy2, Logic} = await loadFixture(deployLogicFixture);
+            // 直接使用BeaconProxy没有admin校验
+            await Logic.attach(beaconProxy1.address).connect(owner).increment();
+        });
+
+        it("only owner can upgrade address", async function () {
+            const {owner, otherAccount, upgradeableBeacon, beaconProxy1, beaconProxy2, Logic} = await loadFixture(deployLogicFixture);
+            const NewLogic = await ethers.getContractFactory("Logic2");
+            const newLogic = await NewLogic.deploy();
+            await expectRevert.unspecified(upgradeableBeacon.connect(otherAccount).upgradeTo(newLogic.address));
         });
 
     });

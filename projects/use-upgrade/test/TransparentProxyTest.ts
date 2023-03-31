@@ -10,9 +10,11 @@ describe("Lock", function () {
         // Contracts are deployed using the first signer/account by default
         const [owner, otherAccount] = await ethers.getSigners();
 
+        // 部署逻辑合约
         const Logic1 = await ethers.getContractFactory("Logic1");
         const logic1 = await Logic1.deploy();
 
+        // 部署代理合约(并设置逻辑合约地址)
         const TUProxy = await ethers.getContractFactory("TransparentProxy");
         const tuProxy = await TUProxy.deploy(logic1.address, owner.getAddress(), "0x");
 

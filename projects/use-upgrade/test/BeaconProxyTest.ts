@@ -12,9 +12,11 @@ describe("Lock", function () {
         const Logic = await ethers.getContractFactory("Logic1");
         const logic = await Logic.deploy();
 
+        // beacon合约
         const MyUpgradeableBeacon = await ethers.getContractFactory("MyUpgradeableBeacon");
         const upgradeableBeacon = await MyUpgradeableBeacon.deploy(logic.address);
 
+        // 代理合约添加beacon合约
         const MyBeaconProxy = await ethers.getContractFactory("MyBeaconProxy");
         const beaconProxy1 = await MyBeaconProxy.deploy(upgradeableBeacon.address, "0x");
         const beaconProxy2 = await MyBeaconProxy.deploy(upgradeableBeacon.address, "0x");

@@ -12,6 +12,7 @@ describe("Lock", function () {
         // Contracts are deployed using the first signer/account by default
         const [owner, otherAccount] = await ethers.getSigners();
 
+        // 部署逻辑合约
         const Logic1 = await ethers.getContractFactory("Logic1");
         const logic1 = await Logic1.deploy();
 

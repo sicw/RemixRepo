@@ -15,6 +15,7 @@ describe("UUPS Test", function () {
         const uupsProxyFactory = await ethers.getContractFactory("UUPSProxy");
         const uupsProxy = await uupsProxyFactory.deploy(logic3.address, "0x");
 
+        // 更新逻辑合约地址
         const proxyMigration = Logic3.attach(uupsProxy.address);
 
         return {owner, otherAccount, uupsProxy, logic3, proxyMigration};

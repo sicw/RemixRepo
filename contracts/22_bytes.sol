@@ -35,4 +35,13 @@ contract Storage {
     function bytesTest4(bytes calldata data) public pure returns(uint) {
         return data.length;
     }
+
+    // solidity中没有字符串比较工具, 所以使用keccak256加密判断
+    // 输入 0x1111 返回 true
+    function bytesTest5(bytes memory data) public view returns(bool) {
+        bytes memory b = new bytes(2);
+        b[0] = 0x11;
+        b[1] = 0x11;
+        return keccak256(abi.encodePacked(data)) == keccak256(abi.encodePacked(b));
+    }
 }
